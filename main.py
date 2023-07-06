@@ -7,6 +7,7 @@ import openai
 app = FastAPI()
 
 DEFAULT_LANGUAGE = 'ko'
+GPT_MODEL = 'gpt-3.5-turbo'
 openai.api_key = os.environ["GPT_API_KEY"]
 
 
@@ -53,7 +54,7 @@ class Gpt:
     def request_gpt(self, input):
         self.input = input
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model=GPT_MODEL,
             messages=[
                 {"role": "system", "content": "You are a assistant"},
                 {"role": "user", "content": self.input}
