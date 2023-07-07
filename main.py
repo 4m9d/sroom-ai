@@ -10,19 +10,13 @@ DEFAULT_LANGUAGE = 'ko'
 GPT_MODEL = 'gpt-3.5-turbo'
 openai.api_key = os.environ["GPT_API_KEY"]
 
-
 @app.get("/")
 async def root(video_id: str = '', lang: str = DEFAULT_LANGUAGE):
     youtube_script = Script()
     youtube_script.get_script(video_id, lang)
-    return youtube_script.text, youtube_script.token_count
-
-
-@app.get("/gpt")
-async def gpt(input: str):
-    gpt_model = Gpt()
-    return gpt_model.request_gpt(input)
-
+    gpt = Gpt()
+    summary = gpt.generate_summary(youtube_script)
+    return summary
 
 class Script:
     def __init__(self):
@@ -56,9 +50,20 @@ class Gpt:
         response = openai.ChatCompletion.create(
             model=GPT_MODEL,
             messages=[
-                {"role": "system", "content": "You are a assistant"},
+                {"role": "system", "content": "You are a quiz and summary generate assistant"},
                 {"role": "user", "content": self.input}
-            ]
+            ],
+            temperature=0.5,
+            max_tokens=1000
         )
         self.output = response["choices"][0]["message"]["content"]
         return self.output
+
+    def generate_summary(self, script):
+        if script.token_count > 3000:
+            return "Error : Over Token"
+
+        summary_prompt = "\n\n 위 스크립트를 취대한 모든 내용이 반영될 수 있도록 요약해줘"
+        prompt = script.text + summary_prompt
+
+        return self.request_gpt(prompt)
