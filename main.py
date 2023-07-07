@@ -9,6 +9,11 @@ app = FastAPI()
 DEFAULT_LANGUAGE = 'ko'
 GPT_MODEL = 'gpt-3.5-turbo'
 openai.api_key = os.environ["GPT_API_KEY"]
+MODEL_PARAMETERS = {
+    "temperatures_high": 0.7,
+    "temperatures_low": 0.3,
+    "max_token_1000": 1000
+}
 
 @app.get("/")
 async def root(video_id: str = '', lang: str = DEFAULT_LANGUAGE):
@@ -45,16 +50,16 @@ class Gpt:
         self.input = ''
         self.output = ''
 
-    def request_gpt(self, input):
-        self.input = input
+    def request_gpt(self, prompt):
+        self.input = prompt
         response = openai.ChatCompletion.create(
             model=GPT_MODEL,
             messages=[
-                {"role": "system", "content": "You are a quiz and summary generate assistant"},
+                {"role": "system", "content": "You are an assistant that generates quizzes and summaries"},
                 {"role": "user", "content": self.input}
             ],
-            temperature=0.5,
-            max_tokens=1000
+            temperature=MODEL_PARAMETERS["temperatures_high"],
+            max_tokens=MODEL_PARAMETERS["max_token_1000"]
         )
         self.output = response["choices"][0]["message"]["content"]
         return self.output
@@ -63,7 +68,7 @@ class Gpt:
         if script.token_count > 3000:
             return "Error : Over Token"
 
-        summary_prompt = "\n\n 위 스크립트를 취대한 모든 내용이 반영될 수 있도록 요약해줘"
+        summary_prompt = "\n\n 위 스크립트를 최대한 모든 내용이 반영될 수 있도록 요약해줘"
         prompt = script.text + summary_prompt
 
         return self.request_gpt(prompt)
