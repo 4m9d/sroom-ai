@@ -34,11 +34,9 @@ async def root(video_id: str = '', lang: str = DEFAULT_LANGUAGE):
     quiz = gpt.generate_quiz(summary)
 
     # GPT로 부터 받은 여러 정보들을 JSON 양식에 맞게 조합
-    response_string = ''
-
-    response_string += '{"videoCode": "' + video_id + '", '
-    response_string += '"summary": "' + summary + '", '
-    response_string += quiz + '}'
+    response_string = '{'
+    response_string += '"videoCode": "{0}", "summary": "{1}", {2}'.format(video_id, summary, quiz)
+    response_string += '}'
 
     # 조합한 String을 JSON 형식으로 변환
     response_json = json.loads(response_string)
