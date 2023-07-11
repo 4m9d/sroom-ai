@@ -46,16 +46,16 @@ class Script:
         self.text = ''
         self.token_count = 0
 
-    def get_script(self, video_id, lang):
+    def get_script(self, video_id: str, lang: str):
         self.raw_script = YouTubeTranscriptApi.get_transcript(video_id, languages=[lang])
         self.to_text(self.raw_script)
         self.count_token(self.text)
 
-    def to_text(self, raw_script):
+    def to_text(self, raw_script: dict):
         for i in range(len(raw_script)):
             self.text += raw_script[i]['text'] + ' '
 
-    def count_token(self, text):
+    def count_token(self, text: str):
         tokenizer = tiktoken.encoding_for_model(constants['gpt_model']['4k'])
 
         tokens = tokenizer.encode(text)
@@ -67,7 +67,7 @@ class Gpt:
         self.input = ''
         self.output = ''
 
-    def request_gpt(self, prompt):
+    def request_gpt(self, prompt: str):
         self.input = prompt
         response = openai.ChatCompletion.create(
             model=constants['gpt_model']['4k'],
@@ -81,7 +81,7 @@ class Gpt:
         self.output = response["choices"][0]["message"]["content"]
         return self.output
 
-    def generate_summary(self, script):
+    def generate_summary(self, script: Script):
 
         summary_prompt = constants['prompt']['summary']
         prompt = script.text + summary_prompt
@@ -92,7 +92,7 @@ class Gpt:
 
         return summary
 
-    def generate_quiz(self, summary):
+    def generate_quiz(self, summary: str):
         quiz_prompt = constants['prompt']['quiz']
 
         prompt = summary + quiz_prompt
