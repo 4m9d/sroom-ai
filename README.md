@@ -31,17 +31,19 @@ welcome to sroom ai
    우선 본 레포지토리를 클론하고 터미널의 현재 경로를 해당 레포지토리로 이동시킨다.
 
    ```bash
-   pip3 install fastapi
-   pip3 install uvicorn
+   pip3 install -r requirements.txt
    ```
-   를 입력하여 해당 라이브러리를 설치한다.
+   를 입력하여 요구되는 패키지 들을 자동으로 설치한다.
 
-   설치 후
+   환경변수 "GPT_API_KEY"를 생성하여 본인의 API키를 저장한다.
 
    ```bash
-   python3 -m uvicorn main:app --reload
+   python3 main.py
    ```
-   를 입력하면 localhost:8000 url 이 뜬다. 해당 페이지에 접속하여
+   를 입력하면 localhost:8000 url 이 뜬다. 해당 페이지에 접속하면
 
-   {"message" : "welcome to sroom ai"} 라고 뜨면 개발 세팅 끝!
+   처음에는 "Internal Server Error"라고 뜬다.
+
+   여기에 "/?video_id={EXAMPLE_ID}&lang={AUDIO_LANGUAGE}" 를 추가하여 실행하면
+   요약본, 퀴즈가 담긴 JSON이 리턴된다.
    
