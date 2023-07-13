@@ -27,6 +27,11 @@ def generate_summary(script: Script):
     prompt = script.text + summary_prompt
 
     summary = request_gpt(prompt)
+
+    return summary
+
+
+def reformat_summary(summary: str):
     summary = summary.replace("\n", "\\n")
     summary = summary.replace("\"", "\\\"")
 
@@ -40,9 +45,18 @@ def generate_quiz(summary: str):
 
     quiz_json = ''
     quiz_json += request_gpt(prompt)
+
+    quiz_json = reformat_quiz(quiz_json)
+
+    return quiz_json
+
+
+def reformat_quiz(quiz_json: str):
     quiz_json = quiz_json.replace("\n", "")
     quiz_json = quiz_json.replace("\"", '"')
 
     quiz_json = quiz_json[1:-1]
 
     return quiz_json
+
+
