@@ -1,0 +1,29 @@
+default_language : "ko"
+
+gpt_model :
+  small : "gpt-3.5-turbo"
+  large : "gpt-3.5-turbo-16k"
+
+message :
+  error:
+    over_token : "Over Token"
+
+script :
+  max_token : 3000
+
+model_parameter :
+  temperature :
+    high : 0.7
+    low : 0.3
+  max_token :
+    1k : 1000
+
+prompt :
+  system_message : {"role": "system", "content": "You are an assistant that generates quizzes and summaries"}
+  summary : "\n\n 위 스크립트를 최대한 모든 내용이 반영될 수 있도록 요약해줘"
+  quiz : "\n\n 위 요약본을 바탕으로 객관식 1문제, 주관식 1문제, True or False 1문제 내줘. \n
+          JSON 형식으로 답변해주고 아래 형식을 지켜셔 답변해줘. \n
+          quizes: [{\"quizType\":\"\" , \"quizQuestion\":\"\", \"quizSelectOption1\": \"\", \"quizSelectOption2\": \"\", \"quizSelectOption3\": \"\", \"quizSelectOption4\": \"\", \"answer\":\"\"}] \n
+          quiz_type은 객관식이면 1, 주관식이면 2, TF면 3으로 할당해주고 객관식 정답은 번호만 넣어줘 \n
+          주관식의 경우 quizSelectOption에는 전부 null 값을 넣어주고, TF 문제는 Option1 에 true, Option2 에 false를 넣어줘 \n
+          TF문제 정답은 true일 경우 1, false 일 경우 2로 반환해줘. 각 문제 중괄호 사이에 반드시 ,을 넣어줘"
