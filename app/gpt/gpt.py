@@ -10,7 +10,7 @@ openai.api_key = os.environ['GPT_API_KEY']
 
 def request_gpt(prompt: str):
     response = openai.ChatCompletion.create(
-        model=constants['gpt_model']['4k'],
+        model=constants['gpt_model']['small'],
         messages=[
             constants['prompt']['system_message'],
             {"role": "user", "content": prompt}

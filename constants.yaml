@@ -1,8 +1,8 @@
 default_language : "ko"
 
 gpt_model :
-  4k : "gpt-3.5-turbo"
-  16k : "gpt-3.5-turbo-16k"
+  small : "gpt-3.5-turbo"
+  large : "gpt-3.5-turbo-16k"
 
 message :
   error:
