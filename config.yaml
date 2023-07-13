@@ -1,0 +1,5 @@
+host:
+  local: "127.0.0.1"
+
+port:
+  local: 8000
