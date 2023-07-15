@@ -15,7 +15,6 @@ with open('config.yaml', encoding='UTF-8') as f:
 
 @app.get("/")
 async def root(video_id: str = '', lang: str = constants['default_language']):
-    print(video_id, lang)
     response = await index(video_id, lang)
     return response
 
