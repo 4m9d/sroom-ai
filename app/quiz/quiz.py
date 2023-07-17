@@ -3,14 +3,13 @@ from main import constants
 
 
 def generate_quiz(summary: str):
+    
     quiz_prompt = constants['prompt']['quiz']
-
     prompt = summary + quiz_prompt
 
-    quiz_json = ''
-    quiz_json += request_gpt(prompt)
+    gpt_response = request_gpt(prompt)
 
-    quiz_json = reformat_quiz(quiz_json)
+    quiz_json = reformat_quiz(gpt_response)
 
     return quiz_json
 
