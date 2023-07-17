@@ -1,6 +1,8 @@
 from app.script.scriptService import *
 from main import constants
 from app.gpt.gpt import *
+from app.summary.summary import *
+from app.quiz.quiz import *
 import json
 
 
@@ -8,12 +10,8 @@ async def index(video_id: str = '', lang: str = constants['default_language']):
     youtube_script = Script()
     get_script(youtube_script, video_id, lang)
 
-    # 스크립트가 3000토큰이 넘을 경우 요약본 생성이 현 시점에선 불가능 하므로 에러 메시지와 함께 리턴
-    if youtube_script.token_count > constants['script']['max_token']:
-        return "Error : " + constants['message']['error']['over_token']
-
     # GPT로부터 요약본 생성
-    summary = generate_summary(youtube_script)
+    summary = generate_summary(youtube_script.text)
 
     # 생성한 요약본을 기준으로 GPT로부터 퀴즈 생성
     quiz = generate_quiz(summary)
