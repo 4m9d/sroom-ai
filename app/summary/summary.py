@@ -35,13 +35,5 @@ def generate_summary(script_text: str):
 
         break
 
-    summary = reformat_summary(summary)
-
     return summary
 
-
-def reformat_summary(summary: str):
-    summary = summary.replace("\n", "\\n")
-    summary = summary.replace("\"", "\\\"")
-
-    return summary
