@@ -9,12 +9,11 @@ def generate_summary(script_text: str):
 
     text = script_text
     summary_prompt = constants['prompt']['summary']
-    chunk_size = 3000
     summary = ""
 
     while True:
 
-        chunks = textwrap.wrap(text, chunk_size)
+        chunks = textwrap.wrap(text, constants['chunk_size']['small'])
         chunk_summaries = []
 
         if len(chunks) > 1:
