@@ -11,6 +11,10 @@ message :
 script :
   max_token : 3000
 
+chunk_size :
+  small : 3000
+  large : 14000
+
 model_parameter :
   temperature :
     high : 0.7

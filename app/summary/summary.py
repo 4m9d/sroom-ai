@@ -7,29 +7,32 @@ from app.gpt.gpt import *
 
 def generate_summary(script_text: str):
 
+    text = script_text
     summary_prompt = constants['prompt']['summary']
-    chunk_size = 3000
+    summary = ""
 
-    chunks = textwrap.wrap(script_text, chunk_size)
-    chunk_summaries = []
+    while True:
 
-    for chunk in chunks:
-        chunk_summaries.append(request_gpt(chunk + summary_prompt))
+        chunks = textwrap.wrap(text, constants['chunk_size']['small'])
+        chunk_summaries = []
 
-    summary = " ".join(chunk_summaries)
+        if len(chunks) > 1:
 
-    if len(chunks) > 3:
-        return generate_summary(summary)
-    elif len(chunks) > 1:
-        summary = request_gpt(summary)
+            for chunk in chunks:
+                chunk_summaries.append(request_gpt(chunk + summary_prompt))
 
-    summary = reformat_summary(summary)
+            summary = " ".join(chunk_summaries)
+
+            if len(chunks) > 3:
+                text = summary
+                continue
+
+            summary = request_gpt(summary)
+
+        else:
+            summary = request_gpt(chunks[0])
+
+        break
 
     return summary
 
-
-def reformat_summary(summary: str):
-    summary = summary.replace("\n", "\\n")
-    summary = summary.replace("\"", "\\\"")
-
-    return summary

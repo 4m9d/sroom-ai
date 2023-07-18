@@ -1,6 +1,6 @@
 from app.gpt.gpt import *
 from main import constants
-
+import json
 
 def generate_quiz(summary: str):
     
@@ -11,13 +11,17 @@ def generate_quiz(summary: str):
 
     quiz_json = reformat_quiz(gpt_response)
 
-    return quiz_json
+    quizes = []
+    for quiz in quiz_json['quizes']:
+        quizes.append(quiz)
+
+    return quizes
 
 
 def reformat_quiz(quiz_json: str):
     quiz_json = quiz_json.replace("\n", "")
     quiz_json = quiz_json.replace("\"", '"')
 
-    quiz_json = quiz_json[1:-1]
+    quiz_json = json.loads(quiz_json)
 
     return quiz_json
