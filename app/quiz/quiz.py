@@ -2,15 +2,16 @@ from app.gpt import gpt
 from main import constants
 import json
 
+MAX_TRY_COUNT = 3
+
 
 def generate_quiz(summary: str):
     
     quiz_prompt = constants['prompt']['quiz']
     prompt = summary + quiz_prompt
-    max_try_count = 3
     quiz_json = {}
 
-    for count in range(max_try_count):
+    for count in range(MAX_TRY_COUNT):
         gpt_response = gpt.request_gpt(prompt)
         quiz_json, is_valid = _reformat_quiz(gpt_response)
         if is_valid:
