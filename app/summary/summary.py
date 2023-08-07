@@ -1,38 +1,27 @@
 import textwrap
 
 from main import constants
-from app.script.script import *
-from app.gpt.gpt import *
+from app.gpt import gpt
 
 
 def generate_summary(script_text: str):
 
     text = script_text
+    max_cycle = int(len(text) / constants['chunk_size']['small']) + 1
     summary_prompt = constants['prompt']['summary']
-    summary = ""
+    summary = ''
 
-    while True:
+    for cycle in range(max_cycle):
 
         chunks = textwrap.wrap(text, constants['chunk_size']['small'])
-        chunk_summaries = []
 
-        if len(chunks) > 1:
+        if len(chunks) == 1:
+            summary = gpt.request_gpt(text + summary_prompt)
+            break
 
-            for chunk in chunks:
-                chunk_summaries.append(request_gpt(chunk + summary_prompt))
+        chunk_summaries = [gpt.request_gpt(chunk + summary_prompt) for chunk in chunks]
+        summary = ' '.join(chunk_summaries)
 
-            summary = " ".join(chunk_summaries)
-
-            if len(chunks) > 3:
-                text = summary
-                continue
-
-            summary = request_gpt(summary)
-
-        else:
-            summary = request_gpt(chunks[0])
-
-        break
+        text = summary
 
     return summary
-

@@ -1,27 +1,37 @@
-from app.gpt.gpt import *
+from app.gpt import gpt
 from main import constants
 import json
+
+MAX_TRY_COUNT = 3
+
 
 def generate_quiz(summary: str):
     
     quiz_prompt = constants['prompt']['quiz']
     prompt = summary + quiz_prompt
+    quiz_json = {}
 
-    gpt_response = request_gpt(prompt)
+    for count in range(MAX_TRY_COUNT):
+        gpt_response = gpt.request_gpt(prompt)
+        quiz_json, is_valid = _reformat_quiz(gpt_response)
+        if is_valid:
+            break
 
-    quiz_json = reformat_quiz(gpt_response)
+    quizzes = []
+    for quiz in quiz_json['quizzes']:
+        quizzes.append(quiz)
 
-    quizes = []
-    for quiz in quiz_json['quizes']:
-        quizes.append(quiz)
-
-    return quizes
+    return quizzes
 
 
-def reformat_quiz(quiz_json: str):
+def _reformat_quiz(quiz_json: str):
     quiz_json = quiz_json.replace("\n", "")
     quiz_json = quiz_json.replace("\"", '"')
 
-    quiz_json = json.loads(quiz_json)
+    try:
+        quiz_json = json.loads(quiz_json)
+    except json.decoder.JSONDecodeError as e:
+        print("JSON Decode Error : retry generate quiz")
+        return {'quizzes': []}, False
 
-    return quiz_json
+    return quiz_json, True

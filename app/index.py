@@ -1,36 +1,28 @@
-from app.script.scriptService import *
+from app.script import script, scriptService
 from main import constants
-from app.gpt.gpt import *
-from app.summary.summary import *
-from app.quiz.quiz import *
-import json
+from app.summary import summary
+from app.quiz import quiz
 
 
 class ResponseModel:
     def __init__(self):
-        self.video_id = ""
-        self.summary = ""
-        self.quizes = []
+        self.video_id = ''
+        self.summary = ''
+        self.quizzes = []
 
-    def setResponse(self, video_id: str, summary: str, quizes: list):
+    def setResponse(self, video_id: str, summary: str, quizzes: list):
         self.video_id = video_id
         self.summary = summary
-        self.quizes = quizes
+        self.quizzes = quizzes
 
 
 async def index(video_id: str = '', lang: str = constants['default_language']):
-    youtube_script = Script()
+    youtube_script = script.Script()
     response = ResponseModel()
-    get_script(youtube_script, video_id, lang)
+    scriptService.get_script(youtube_script, video_id, lang)
 
-    # GPT로부터 요약본 생성
-    summary = generate_summary(youtube_script.text)
-
-    # 생성한 요약본을 기준으로 GPT로부터 퀴즈 생성
-    quizes = generate_quiz(summary)
-
-    # GPT로 부터 받은 여러 정보들을 JSON 양식에 맞게 조합
-
-    response.setResponse(video_id, summary, quizes)
+    response.video_id = video_id
+    response.summary = summary.generate_summary(youtube_script.text)
+    response.quizzes = quiz.generate_quiz(response.summary)
 
     return response
