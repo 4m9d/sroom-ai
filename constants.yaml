@@ -16,6 +16,7 @@ chunk_size :
   large : 14000
 
 model_parameter :
+  url : 'https://api.openai.com/v1/chat/completions'
   temperature :
     high : 0.7
     low : 0.3

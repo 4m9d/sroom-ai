@@ -5,14 +5,14 @@ import json
 MAX_TRY_COUNT = 3
 
 
-def generate_quiz(summary: str):
+async def generate_quiz(summary: str):
     
     quiz_prompt = constants['prompt']['quiz']
     prompt = summary + quiz_prompt
     quiz_json = {}
 
     for count in range(MAX_TRY_COUNT):
-        gpt_response = gpt.request_gpt(prompt)
+        gpt_response = await gpt.request_gpt(prompt)
         quiz_json, is_valid = _reformat_quiz(gpt_response)
         if is_valid:
             break

@@ -2,6 +2,7 @@ from app.script import script, scriptService
 from main import constants
 from app.summary import summary
 from app.quiz import quiz
+import time
 
 
 class ResponseModel:
@@ -22,7 +23,10 @@ async def index(video_id: str = '', lang: str = constants['default_language']):
     scriptService.get_script(youtube_script, video_id, lang)
 
     response.video_id = video_id
-    response.summary = summary.generate_summary(youtube_script.text)
-    response.quizzes = quiz.generate_quiz(response.summary)
+    summary_start_time = time.time()
+    response.summary = await summary.generate_summary(youtube_script.text)
+    summary_end_time = time.time()
+    print("generate summary time(sec) : ", summary_end_time - summary_start_time)
+    response.quizzes = await quiz.generate_quiz(response.summary)
 
     return response
