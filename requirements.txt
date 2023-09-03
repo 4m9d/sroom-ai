@@ -6,7 +6,7 @@ asgiref==3.7.2
 async-timeout==4.0.2
 attrs==23.1.0
 billiard==4.1.0
-celery==5.3.3
+celery==5.3.1
 celery-pool-asyncio==0.2.0
 certifi==2023.5.7
 charset-normalizer==3.1.0
