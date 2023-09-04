@@ -1,8 +1,7 @@
 from youtube_transcript_api import YouTubeTranscriptApi
-from app.script.script import *
 import tiktoken
 
-
+from app.script.script import *
 from main import constants
 
 

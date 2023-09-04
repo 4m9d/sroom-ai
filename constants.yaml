@@ -21,14 +21,16 @@ model_parameter :
     high : 0.7
     low : 0.3
   max_token :
-    1k : 1000
+    1k : 900
 
 prompt :
   system_message : {"role": "system", "content": "You are an assistant that generates quizzes and summaries"}
   summary : "\n\n 위 스크립트를 최대한 모든 내용이 반영될 수 있도록 요약해줘. \"위 스크립트는\" 과 같은 서론은 빼줘"
   quiz : "\n\n 위 요약본을 바탕으로 객관식 1문제, 주관식 1문제, True or False 1문제 내줘. \n
           JSON 형식으로 답변해주고 아래 형식을 지켜셔 답변해줘. \n
-          quizzes: [{\"quizType\":\"\" , \"quizQuestion\":\"\", \"quizSelectOption1\": \"\", \"quizSelectOption2\": \"\", \"quizSelectOption3\": \"\", \"quizSelectOption4\": \"\", \"answer\":\"\"}] \n
-          quiz_type은 객관식이면 1, 주관식이면 2, TF면 3으로 할당해주고 객관식 정답은 번호만 넣어줘 \n
-          주관식의 경우 quizSelectOption에는 전부 null 값을 넣어주고, TF 문제는 Option1 에 true, Option2 에 false를 넣어줘 \n
-          TF문제 정답은 true일 경우 1, false 일 경우 2로 반환해줘. 각 문제 중괄호 사이에 반드시 ,을 넣어줘"
+          quizzes: [{\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}] \n
+          quiz_type은 객관식이면 1, 주관식이면 2, TF면 3으로 할당해줘 \n
+          quiz_question에는 문제가 들어가게 해주고\"
+          \"quiz_select_option\" 리스트 안에는 객관식 선택 옵션들을 넣어줘. option 리스트 요소 갯수는 반드시 4로 해줘, 객관식에서 answer에는 \"option\" 리스트 안에 선택 옵션 중 정답이 있는 번호를 넣어줘 (1부터 시작이야)\n
+          주관식과 TF문제의 경우 option 리스트를 빈 리스트로 반환해줘. 빈 리스트 형식은 []로 통일할게\n
+          TF문제 정답은 true일 경우 1, false 일 경우 2로 반환해줘. 모든 answer는 반드시 답을 작성해줘. answer가 너무 길면 짧게라도 답변해줘"

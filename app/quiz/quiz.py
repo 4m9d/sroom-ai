@@ -1,6 +1,7 @@
+import json
+
 from app.gpt import gpt
 from main import constants
-import json
 
 MAX_TRY_COUNT = 3
 
