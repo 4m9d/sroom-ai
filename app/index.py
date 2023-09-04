@@ -1,6 +1,6 @@
 import asyncio
-
 from celery_app import celery_app
+
 from app.script import script, scriptService
 from main import constants
 from app.summary import summary

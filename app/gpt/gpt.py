@@ -1,12 +1,8 @@
-import time
-
 import aiohttp
 import openai
 import os
 
 from main import constants
-from app.script.script import *
-
 
 openai.api_key = os.environ['GPT_API_KEY']
 
