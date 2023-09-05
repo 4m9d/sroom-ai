@@ -25,12 +25,12 @@ model_parameter :
 
 prompt :
   system_message : {"role": "system", "content": "You are an assistant that generates quizzes and summaries"}
-  summary : "\n\n 위 스크립트를 최대한 모든 내용이 반영될 수 있도록 요약해줘. \"위 스크립트는\" 과 같은 서론은 빼줘"
-  quiz : "\n\n 위 요약본을 바탕으로 객관식 1문제, 주관식 1문제, True or False 1문제 내줘. \n
-          JSON 형식으로 답변해주고 아래 형식을 지켜셔 답변해줘. \n
+  summary : "\n\n Please summarize the above script so that everything is reflected as much as possible. Please write a summary as if the student is writing down the contents of the class in a notebook. Please make the summary in Korean."
+  quiz : "\n\n Based on the summary above, please give me 1 multiple choice question, 1 short answer question, and 1 True or False question. \n
+          Please answer in JSON format and follow the format below. \n
           quizzes: [{\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}] \n
-          quiz_type은 객관식이면 1, 주관식이면 2, TF면 3으로 할당해줘 \n
-          quiz_question에는 문제가 들어가게 해주고\"
-          \"quiz_select_option\" 리스트 안에는 객관식 선택 옵션들을 넣어줘. option 리스트 요소 갯수는 반드시 4로 해줘, 객관식에서 answer에는 \"option\" 리스트 안에 선택 옵션 중 정답이 있는 번호를 넣어줘 (1부터 시작이야)\n
-          주관식과 TF문제의 경우 option 리스트를 빈 리스트로 반환해줘. 빈 리스트 형식은 []로 통일할게\n
-          TF문제 정답은 true일 경우 1, false 일 경우 2로 반환해줘. 모든 answer는 반드시 답을 작성해줘. answer가 너무 길면 짧게라도 답변해줘"
+          quiz_type is assigned to 1 for multiple choice, 2 for short answer, and 3 for True or False \n
+          quiz_question allows questions to go in\"
+          Please put multiple choice options in the quiz_select_option list. The number of optional list elements must be 4. In multiple choice, answer is to put a number in the option list with the correct answer among the options (starting from 1)\n
+          For short answer and TF problems, please return the option list as an empty list. Please unify the blank list format to []\n
+          Please return the TF question to 1 if true and 2 if false. All answer must be filled out. If the answer is too long, please give me a short answer. Make sure to give one question for each type. Please write the quiz questions, answers, and options in Korean"
