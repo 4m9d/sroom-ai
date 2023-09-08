@@ -11,16 +11,13 @@ class ResponseModel:
     def __init__(self):
         self.video_id = ''
         self.summary = ''
+        self.is_valid = 0
         self.quizzes = []
-
-    def setResponse(self, video_id: str, summary: str, quizzes: list):
-        self.video_id = video_id
-        self.summary = summary
-        self.quizzes = quizzes
 
     def to_dict(self):
         return {
             'video_id': self.video_id,
+            'is_valid': self.is_valid,
             'summary': self.summary,
             'quizzes': self.quizzes
         }
@@ -36,10 +33,13 @@ def index(video_id: str = '', lang: str = constants['default_language']):
 
     response.video_id = video_id
 
-    summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text))
-    quizzes_result = loop.run_until_complete(quiz.generate_quiz(summary_result))
+    if youtube_script.is_valid:
+        response.is_valid = 1
 
-    response.summary = summary_result
-    response.quizzes = quizzes_result
+        summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text))
+        quizzes_result = loop.run_until_complete(quiz.generate_quiz(summary_result))
+
+        response.summary = summary_result
+        response.quizzes = quizzes_result
 
     return response.to_dict()
