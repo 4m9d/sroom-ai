@@ -33,4 +33,4 @@ prompt :
           quiz_question allows questions to go in\"
           Please put multiple choice options in the quiz_select_option list. The number of optional list elements must be 4. In multiple choice, answer is to put a number in the option list with the correct answer among the options (starting from 1)\n
           For short answer and TF problems, please return the option list as an empty list. Please unify the blank list format to []\n
-          Please return the TF question to 1 if true and 2 if false. All answer must be filled out. If the answer is too long, please give me a short answer. Make sure to give one question for each type. Please write the quiz questions, answers, and options in Korean"
+          Please return the TF question to 1 if true and 0 if false. All answer must be filled out. If the answer is too long, please give me a short answer. Make sure to give one question for each type. Please write the quiz questions, answers, and options in Korean"
