@@ -52,6 +52,7 @@ welcome to sroom ai
 
    모든 세팅이 완료되었다면 아래 명령어를 통해 실행해야 한다.
    brew 명령어를 제외한 모든 명령은 프로젝트 패키지 안에서 실행해야 한다.
+   또한 각 명령어를 서로 다른 터미널에서 실행해야 한다.
 
    ```bash
    brew services start redis
