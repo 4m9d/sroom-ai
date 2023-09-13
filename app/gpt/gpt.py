@@ -17,10 +17,14 @@ async def request_gpt(prompt: str):
                     constants['prompt']['system_message'],
                     {"role": "user", "content": prompt}
                 ],
-                'model': constants['gpt_model']['small'],
+                'model': constants['gpt_model']['large'],
                 'temperature': constants['model_parameter']['temperature']['high'],
-                'max_tokens': constants['model_parameter']['max_token']['1k']
+                'max_tokens': constants['model_parameter']['max_token']['2k']
             }
         ) as response:
             response_data = await response.json()
-            return response_data["choices"][0]["message"]["content"]
+            try:
+                return response_data["choices"][0]["message"]["content"]
+            except:
+                return ""
+
