@@ -8,9 +8,6 @@ message :
   error:
     over_token : "Over Token"
 
-script :
-  max_token : 3000
-
 chunk_size :
   small : 3000
   large : 14000
@@ -22,9 +19,11 @@ model_parameter :
     low : 0.3
   max_token :
     1k : 900
+    2k : 1900
 
 prompt :
   system_message : {"role": "system", "content": "You are an assistant that generates quizzes and summaries"}
+  final_summary: "\n\n Please summarize the article in make sure to write the summary in Korean. Please write in Korean but English terms in English. And please make the summary in the form of a markdown raw code with escape sequence."
   summary : "\n\n Please summarize the above script so that everything is reflected as much as possible. Please write a summary as if the student is writing down the contents of the class in a notebook. Please make the summary in Korean."
   quiz : "\n\n Based on the summary above, please give me 1 multiple choice question, 1 short answer question, and 1 True or False question. \n
           Please answer in JSON format and follow the format below. \n
