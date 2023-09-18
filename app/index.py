@@ -4,7 +4,7 @@ from celery_app import celery_app
 from app.script import script, scriptService
 from main import constants
 from app.summary import summary
-from app.quiz import quiz
+from app.quiz import quiz, quizv2
 
 
 class ResponseModel:
@@ -37,7 +37,7 @@ def index(video_id: str = '', lang: str = constants['default_language']):
         response.is_valid = 1
 
         summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text))
-        quizzes_result = loop.run_until_complete(quiz.generate_quiz(summary_result))
+        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summary_result))
 
         response.summary = summary_result
         response.quizzes = quizzes_result
