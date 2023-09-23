@@ -17,7 +17,7 @@ def get_script(script: Script, video_id: str, lang: str):
 
     for transcript in lang_list:
         if not transcript.is_generated:
-            if transcript.language_code == 'en':
+            if transcript.language_code == 'ko':
                 available_language = transcript
                 break
             else:
@@ -25,7 +25,7 @@ def get_script(script: Script, video_id: str, lang: str):
         else:
             if not type(available_language) == str:
                 break
-            if transcript.language_code == 'en':
+            if transcript.language_code == 'ko':
                 available_language = transcript
                 break
             else:

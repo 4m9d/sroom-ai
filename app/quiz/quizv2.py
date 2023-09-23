@@ -12,8 +12,8 @@ async def generate_quizzes(summary: str):
     quizzes = []
 
     quizzes.append(await generate_multiple_choice_quiz(summary))
-    quizzes.append(await generate_subjective_quiz(summary))
-    quizzes.append(await generate_tf_quiz(summary))
+    quizzes.append(await generate_subjective_quiz(summary, quizzes[0]))
+    quizzes.append(await generate_tf_quiz(summary, quizzes[0], quizzes[1]))
 
     return quizzes
 
@@ -32,8 +32,10 @@ async def generate_multiple_choice_quiz(summary: str):
     return quiz_json
 
 
-async def generate_subjective_quiz(summary: str):
-    prompt = summary + constants['prompt']['subjective_quiz']['kr']
+async def generate_subjective_quiz(summary: str, multiple_choice_quiz: dict):
+    prompt = (summary
+              + constants['prompt']['subjective_quiz']['kr']
+              + json.dumps(multiple_choice_quiz))
     quiz_json = {}
 
     for count in range(MAX_TRY_COUNT):
@@ -46,8 +48,11 @@ async def generate_subjective_quiz(summary: str):
     return quiz_json
 
 
-async def generate_tf_quiz(summary: str):
-    prompt = summary + constants['prompt']['tf_quiz']['kr']
+async def generate_tf_quiz(summary: str, multiple_choice_quiz: dict, subjective_quiz: dict):
+    prompt = (summary
+              + constants['prompt']['tf_quiz']['kr']
+              + json.dumps(multiple_choice_quiz)
+              + json.dumps(subjective_quiz))
     quiz_json = {}
 
     for count in range(MAX_TRY_COUNT):
