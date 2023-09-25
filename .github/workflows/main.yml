@@ -21,7 +21,7 @@ jobs:
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.AWS_SSH_HOST }}
-          username: ${{ secrets.AWS_SSH_USERNAME }}
+          username: ubuntu
           key: ${{ secrets.SSH_SECRET_KEY }}
           script_stop: true
           script: |
