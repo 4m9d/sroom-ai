@@ -1,0 +1,36 @@
+name: Sroom-AI-Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: SSH Commands
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.AWS_SSH_HOST }}
+          username: ${{ secrets.AWS_SSH_USERNAME }}
+          key: ${{ secrets.AWS_SSH_KEY }}
+          script_stop: true
+          script: |
+            cd sroom-ai/
+            git pull
+            pip3 install -r requirements.txt
+
+            tmux send-keys -t celery "^C" C-m
+            tmux send-keys -t server "^C" C-m
+
+            tmux send-keys -t server "python3 main.py server" C-m
+            tmux send-keys -t celery "celery -A celery_app worker -l info" C-m
