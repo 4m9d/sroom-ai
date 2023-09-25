@@ -9,8 +9,8 @@ async def generate_summary(script_text: str):
 
     text = script_text
     max_cycle = int(len(text) / constants['chunk_size']['large']) + 1
-    summary_prompt = constants['prompt']['summary']
-    final_summary_prompt = constants['prompt']['final_summary']
+    summary_prompt = constants['prompt']['summary']['kr']
+    final_summary_prompt = constants['prompt']['final_summary']['en']
     summary = ''
 
     for cycle in range(max_cycle):

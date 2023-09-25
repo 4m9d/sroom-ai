@@ -8,7 +8,7 @@ MAX_TRY_COUNT = 3
 
 async def generate_quiz(summary: str):
     
-    quiz_prompt = constants['prompt']['quiz']
+    quiz_prompt = constants['prompt']['quiz']['kr']
     prompt = summary + quiz_prompt
     quiz_json = {}
 
@@ -20,9 +20,25 @@ async def generate_quiz(summary: str):
 
     quizzes = []
     for quiz in quiz_json['quizzes']:
+        # quiz = await validation_quiz(json.dumps(quiz))
         quizzes.append(quiz)
 
     return quizzes
+
+
+async def validation_quiz(raw_quiz: str):
+
+    quiz_validation_prompt = constants['prompt']['quiz_validation']['kr']
+    prompt = raw_quiz + quiz_validation_prompt
+    quiz_json = {}
+
+    for count in range(MAX_TRY_COUNT):
+        gpt_response = await gpt.request_gpt(prompt)
+        quiz_json, is_valid = _reformat_quiz(gpt_response)
+        if is_valid:
+            break
+
+    return quiz_json
 
 
 def _reformat_quiz(quiz_json: str):
