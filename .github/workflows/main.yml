@@ -22,7 +22,7 @@ jobs:
         with:
           host: ${{ secrets.AWS_SSH_HOST }}
           username: ${{ secrets.AWS_SSH_USERNAME }}
-          key: ${{ secrets.AWS_SSH_KEY }}
+          key: ${{ secrets.SSH_SECRET_KEY }}
           script_stop: true
           script: |
             cd sroom-ai/
