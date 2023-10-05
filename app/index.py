@@ -24,19 +24,19 @@ class ResponseModel:
 
 
 @celery_app.task()
-def index(video_id: str = '', lang: str = constants['default_language']):
+def index(video_id: str = '', video_title: str = ''):
     response = ResponseModel()
     loop = asyncio.get_event_loop()
 
     youtube_script = script.Script()
-    scriptService.get_script(youtube_script, video_id, lang)
+    scriptService.get_script(youtube_script, video_id)
 
     response.video_id = video_id
 
     if youtube_script.is_valid:
         response.is_valid = 1
 
-        summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text))
+        summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text, video_title))
         quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summary_result))
 
         response.summary = summary_result

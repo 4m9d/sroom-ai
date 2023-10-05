@@ -7,14 +7,14 @@ from main import constants
 openai.api_key = os.environ['GPT_API_KEY']
 
 
-async def request_gpt(prompt: str):
+async def request_gpt(prompt: str, system_message: dict):
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
         async with session.post(
             constants['model_parameter']['url'],
             headers={'Authorization': f'Bearer {openai.api_key}'},
             json={
                 'messages': [
-                    constants['prompt']['system_message'],
+                    system_message,
                     {"role": "user", "content": prompt}
                 ],
                 'model': constants['gpt_model']['large'],
@@ -26,5 +26,6 @@ async def request_gpt(prompt: str):
             try:
                 return response_data["choices"][0]["message"]["content"]
             except:
+                print(response)
                 return ""
 
