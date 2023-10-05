@@ -5,8 +5,7 @@ from app.script.script import *
 from main import constants
 
 
-def get_script(script: Script, video_id: str, lang: str):
-    lang_list = []
+def get_script(script: Script, video_id: str):
     available_language = ''
 
     try:
@@ -20,7 +19,9 @@ def get_script(script: Script, video_id: str, lang: str):
             if transcript.language_code == 'ko':
                 available_language = transcript
                 break
-            else:
+            elif transcript.language_code == 'en':
+                available_language = transcript
+            elif available_language == '':
                 available_language = transcript
         else:
             if not type(available_language) == str:
@@ -28,7 +29,9 @@ def get_script(script: Script, video_id: str, lang: str):
             if transcript.language_code == 'ko':
                 available_language = transcript
                 break
-            else:
+            elif transcript.language_code == 'en':
+                available_language = transcript
+            elif available_language == '':
                 available_language = transcript
 
     script.raw_script = available_language.fetch()

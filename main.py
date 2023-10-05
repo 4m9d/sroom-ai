@@ -23,8 +23,8 @@ thread_lock = threading.Lock()
 
 
 @app.get("/", status_code=202)
-async def root(video_id: str = '', lang: str = constants['default_language']):
-    task = index.delay(video_id, lang)
+async def root(video_id: str = '', video_title: str = ''):
+    task = index.delay(video_id, video_title)
     with thread_lock:
         task_list.append(task.id)
     return {"message": "submit success"}

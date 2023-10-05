@@ -21,9 +21,10 @@ async def generate_quizzes(summary: str):
 async def generate_multiple_choice_quiz(summary: str):
     prompt = summary + constants['prompt']['multiple_choice_quiz']['kr']
     quiz_json = {}
+    system_message = constants['prompt']['multiple_choice_quiz']['system_message']
 
     for count in range(MAX_TRY_COUNT):
-        gpt_response = await gpt.request_gpt(prompt)
+        gpt_response = await gpt.request_gpt(prompt, system_message)
         print(gpt_response)
         quiz_json, is_valid = _reformat_quiz(gpt_response)
         if is_valid:
@@ -37,9 +38,10 @@ async def generate_subjective_quiz(summary: str, multiple_choice_quiz: dict):
               + constants['prompt']['subjective_quiz']['kr']
               + json.dumps(multiple_choice_quiz))
     quiz_json = {}
+    system_message = constants['prompt']['subjective_quiz']['system_message']
 
     for count in range(MAX_TRY_COUNT):
-        gpt_response = await gpt.request_gpt(prompt)
+        gpt_response = await gpt.request_gpt(prompt, system_message)
         print(gpt_response)
         quiz_json, is_valid = _reformat_quiz(gpt_response)
         if is_valid:
@@ -54,9 +56,10 @@ async def generate_tf_quiz(summary: str, multiple_choice_quiz: dict, subjective_
               + json.dumps(multiple_choice_quiz)
               + json.dumps(subjective_quiz))
     quiz_json = {}
+    system_message = constants['prompt']['tf_quiz']['system_message']
 
     for count in range(MAX_TRY_COUNT):
-        gpt_response = await gpt.request_gpt(prompt)
+        gpt_response = await gpt.request_gpt(prompt, system_message)
         print(gpt_response)
         quiz_json, is_valid = _reformat_quiz(gpt_response)
         if is_valid:
