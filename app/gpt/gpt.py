@@ -1,3 +1,5 @@
+import time
+
 import aiohttp
 import openai
 import os
@@ -26,6 +28,5 @@ async def request_gpt(prompt: str, system_message: dict):
             try:
                 return response_data["choices"][0]["message"]["content"]
             except:
-                print(response)
                 return ""
 
