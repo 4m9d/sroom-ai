@@ -32,4 +32,4 @@ jobs:
             tmux send-keys -t server "^C" C-m
 
             tmux send-keys -t server "python3 main.py server" C-m
-            tmux send-keys -t celery "celery -A celery_app worker --concurrency=8 -l info" C-m
+            tmux send-keys -t celery "celery -A celery_app worker --concurrency=7 -l info" C-m
