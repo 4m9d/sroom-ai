@@ -25,13 +25,11 @@ humanize==4.8.0
 idna==3.4
 iniconfig==2.0.0
 kombu==5.3.2
-kss==4.5.3
 multidict==6.0.4
 networkx==3.1
 numpy==1.25.0
 openai==0.27.8
 packaging==23.1
-pecab==1.0.8
 pluggy==1.2.0
 prometheus-client==0.17.1
 prompt-toolkit==3.0.39
@@ -40,7 +38,6 @@ pybind11==2.9.2
 pydantic==1.10.9
 pytest==7.4.0
 python-dateutil==2.8.2
-python-mecab-kor==1.2.8
 pytz==2023.3
 PyYAML==6.0
 redis==5.0.0
