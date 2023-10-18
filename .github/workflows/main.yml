@@ -16,7 +16,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-northeast-2
 
-      - name: SSH Commands
+      - name: Deploy Main Server
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.AWS_SSH_HOST }}
@@ -33,3 +33,22 @@ jobs:
 
             tmux send-keys -t server "python3 main.py server" C-m
             tmux send-keys -t celery "celery -A celery_app worker --concurrency=10 -l info" C-m
+
+      - name: Deploy Test Server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.AWS_SSH_TEST_HOST }}
+          username: ubuntu
+          key: ${{ secrets.SSH_SECRET_KEY }}
+          script_stop: true
+          script: |
+            cd sroom-ai/
+            git pull
+            pip3 install -r requirements.txt
+
+            tmux send-keys -t celery "^C" C-m
+            tmux send-keys -t server "^C" C-m
+
+            tmux send-keys -t server "python3 main.py server" C-m
+            tmux send-keys -t celery "celery -A celery_app worker --concurrency=5 -l info" C-m
+
