@@ -29,7 +29,7 @@ prompt :
     kr : "\n\n 위 글을 한국어로 마크다운 형식으로 만들어줘. 코드블록은 빼고 작성해줘.\n
           Heading2로 제목을 달아주고, 각 키워드나 핵심 내용들을 나눠서 작성해줘.\n\n"
   summary :
-    system_message: { "role": "system", "content": "summarize the given text so that it contains everything information as much as possible." }
+    system_message: { "role": "system", "content": "summarize the given text in korean so that it contains everything information as much as possible." }
     en : "\n\n Please summarize the above script so that everything is reflected as much as possible. Please write a summary as if the student is writing down the contents of the class in a notebook. Please make the summary in Korean."
     kr : "\n\n 아래는 유튜브 영상 제목과 그 영상의 스크립트야. 제목과 스크립트 내용을 바탕으로 요약을 진행해줘. 최대한 디테일하게 내용을 담아줘. 요약은 한국어로 진행해줘."
   quiz :
@@ -52,63 +52,13 @@ prompt :
           true or false 문제는 답이 true일 경우 1, 거짓일 경우 0이 들어가면되.
           모든 answer항목은 반드시 답이 채워져 있어야해. 빈칸이면 안되."
 
-  quiz_validation :
-    en : "\n\nThe above json is the quiz json you answered.\n
-          Please review the json and correct the error according to the requirements below.\n\n
-          ------
-          0. Please modify the contents of the quiz questions shown above while preserving them.\n 
-          1. The json format of quiz is as follows. {\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}\n
-          2. quiz_type has 1,2,3 and 1 is multiple choice, 2 is subjective, and 3 is true or false\n
-          3. quiz_question means a quiz question\n
-          4. Quiz_select_option means a choice option in multiple choice questions. For the subjective and true or false questions, enter the blank list [] format.\n
-          5. The answer to the quiz is included in the answer.\n
-          6. Please make sure the answer is not empty.\n
-          7. If quiz_type is 1, answer must contain the index number of the correct element among the elements in quiz_select_option. Must be in the Integer format and never list or any other format. Index numbers start from 1.\n
-          8. If the quiz_type is 2, the answer must be in the string format, and it must not be in the list format.\n
-          9. If quiz_type is 3, please check if the question is true, answer is 1, and if it is false, check if it is entered as 0.\n
-          10. Please write all the questions in Korean and the answers in Korean for the short answer questions.\n
-          ------"
-    kr : "\n\n 위 json은 너가 방금 답변으로 생성한 퀴즈야\n
-          해당 json을 아래 항목들을 바탕으로 검토해서 적절하게 수정한 결과를 줘\n
-          ------
-          0. 퀴즈 문제는 보존한 상태에서 수정을 진행해줘.
-          1. json의 형식은 다음과 같아. {\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}\n
-          2. quiz_type은 1,2,3이 있고 1은 객관식, 2는 주관식, 3은 참거짓 문제야.\n
-          3. quiz_question에는 문제가 들어가.
-          4. quiz_select_option에는 객관식에서 선택할 수 있는 선택 옵션들이 리스트 형식으로 들어가. 주관식과 참거짓 문제의 경우 빈 리스트 [] 형식으로 들어가.\n
-          5. answer에는 퀴즈의 정답이 들어가며 빈칸이면 안되.
-          6. 만약 quiz_type이 1이면 answer에는 quiz_select_option에서 정답인 element의 인덱스 번호가 들어가면되. int형식만 허용되고 리스트 등의 다른 형식은 안되. 인덱스 시작 번호는 1이야.\n
-          7. 만약 quiz_type이 2이면 answer에는 주관식 답안이 들어가. 반드시 string 형식으로 들어가고, 답이 여러 개더라도 list형식은 안되. \n
-          8. 만약 quiz_type이 3이면 answer에는 true or false 답안이 들어가. true일 경우 1, false일 경우 0 이 들어가.\n
-          ------"
-
   multiple_choice_quiz:
     system_message: { "role": "system", "content": "Make a multiple choice quiz with the given text" }
-    kr : "\n\n 위 요약본을 바탕으로 객관식 문제를 1문제만 만들어줘.\n
-          문제는 json형식으로 만들어 주고 그 형식은 아래와 같아.\n
-          {\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}\n
+    kr : "\n\n 위 요약본을 바탕으로 객관식 문제를 10문제 만들어줘.\n
+          문제는 json 리스트 형식으로 만들어 주고 그 형식은 아래와 같아.\n
+          [{\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"},{...}]\n
           quiz_type은 1로 할당해주고, quiz_question에는 문제가 들어가면 되.
           quiz_select_options에는 객관식 선택 옵션들이 리스트 형식으로 들어가면 되.
-          예를 들어 선택옵션이 옵션1, 옵션2, 옵션3 이면, \"quiz_select_options\": [\"옵션1\", \"옵션2\", \"옵션3\"]이런 식으로 만들어야해.
+          예를 들어 선택 옵션이 옵션1, 옵션2, 옵션3 이면, \"quiz_select_options\": [\"옵션1\", \"옵션2\", \"옵션3\"]이런 식으로 만들어야해.
           answer에는 quiz_select_options에서 정답인 element의 인덱스 번호를 넣어줘. 인덱스 시작 번호는 1이야.\n
-          반드시 json형식으로만 답변해줘."
-
-  subjective_quiz:
-    system_message: { "role": "system", "content": "Make a subjective quiz with the given text" }
-    kr: "\n\n 위 요약본을 바탕으로 주관식 문제를 1문제만 만들어줘.\n
-          문제는 json형식으로 만들어 주고 그 형식은 아래와 같아.\n
-          {\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}\n
-          quiz_type은 2로 할당해주고, quiz_question에는 문제가 들어가면 되.
-          quiz_select_options에는 그냥 빈 리스트 []로 그대로 반환하면 되.
-          answer에는 주관식 정답을 넣어줘. String 형식이여야 하고 List같은 다른 형식은 안되.
-          반드시 json형식으로만 답변해줘. 아래 퀴즈의 내용과는 다른 내용을 바탕으로 출제해줘"
-
-  tf_quiz:
-    system_message: { "role": "system", "content": "Make a true or false quiz with the given text" }
-    kr: "\n\n 위 요약본을 바탕으로 true or false 문제를 1문제만 만들어줘.\n
-          문제는 json형식으로 만들어 주고 그 형식은 아래와 같아.\n
-          {\"quiz_type\":\"\" ,\"quiz_question\": \"\" \"quiz_select_options\": [], \"answer\":\"\"}\n
-          quiz_type은 3로 할당해주고, quiz_question에는 문제가 들어가면 되.
-          quiz_select_options에는 그냥 빈 리스트 []로 그대로 반환하면 되.
-          answer에는 정답이 true이면 1, false이면 0을 넣어주면 되.
-          반드시 json형식으로만 답변해줘. 아래 퀴즈들의 내용과는 다른 내용을 바탕으로 출제해줘"
+          반드시 json형식으로만 답변해주고 문제는 한국어로 출제해줘."
