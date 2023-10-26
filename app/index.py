@@ -13,13 +13,15 @@ class ResponseModel:
         self.summary = ''
         self.is_valid = 0
         self.quizzes = []
+        self.tokens = 0
 
     def to_dict(self):
         return {
             'video_id': self.video_id,
             'is_valid': self.is_valid,
             'summary': self.summary,
-            'quizzes': self.quizzes
+            'quizzes': self.quizzes,
+            'tokens' : self.tokens
         }
 
 
@@ -37,9 +39,10 @@ def index(video_id: str = '', video_title: str = ''):
         response.is_valid = 1
 
         summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text, video_title))
-        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summary_result))
+        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summary_result, youtube_script.token_count))
 
         response.summary = summary_result
         response.quizzes = quizzes_result
+        response.tokens = youtube_script.token_count
 
     return response.to_dict()

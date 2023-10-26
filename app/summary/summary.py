@@ -23,6 +23,7 @@ async def generate_summary(script_text: str, video_title: str):
 
         tasks = [gpt.request_gpt(summary_prompt + "\n title : " + video_title + "\n script : " + chunk,
                                  constants['prompt']['summary']['system_message']) for idx, chunk in enumerate(chunks)]
+
         chunk_summaries = await asyncio.gather(*tasks)
         summary = ' '.join(chunk_summaries)
 

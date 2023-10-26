@@ -1,14 +1,14 @@
 import json
 
-
 from main import constants
 from app.gpt import gpt
 
 MAX_TRY_COUNT = 3
 
 
-async def generate_quizzes(summary: str):
-    prompt = summary + constants['prompt']['multiple_choice_quiz']['kr']
+async def generate_quizzes(summary: str, script_tokens: int):
+    quiz_count = set_quiz_count(script_tokens)
+    prompt = summary + constants['prompt']['multiple_choice_quiz']['kr'] + str(quiz_count)
     quiz_json = {}
     system_message = constants['prompt']['multiple_choice_quiz']['system_message']
 
@@ -19,6 +19,16 @@ async def generate_quizzes(summary: str):
             break
 
     return quiz_json
+
+
+def set_quiz_count(script_tokens: int):
+    quiz_count = 3
+    if script_tokens > 5000:
+        quiz_count += int((script_tokens - 5000) / 2500) + 1
+        if quiz_count > 15:
+            quiz_count = 15
+
+    return quiz_count
 
 
 def _reformat_quiz(quiz_json: str):
