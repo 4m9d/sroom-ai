@@ -39,6 +39,6 @@ def _reformat_quiz(quiz_json: str):
         quiz_json = json.loads(quiz_json)
     except json.decoder.JSONDecodeError as e:
         print("JSON Decode Error : retry generate quiz")
-        return [{'quiz_type': 2, 'quiz_question': '퀴즈 생성중 오류가 발생했습니다. ㅠㅠ', 'quiz_select_options': [], 'answer': ''}], False
+        return [{'quiz_type': 1, 'quiz_question': 'ERROR!', 'quiz_select_options': ['퀴즈 생성중 오류가 발생했습니다. ㅠㅠ'], 'answer': 1}], False
 
     return quiz_json, True
