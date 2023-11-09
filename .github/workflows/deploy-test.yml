@@ -27,7 +27,7 @@ jobs:
             cd sroom-ai/
                     
             git fetch
-            git checkout ${{ github.event.pull_request.head.ref }}
+            git checkout '${{ github.event.pull_request.head.ref }}'
             git pull
             
             pip3 install -r requirements.txt
