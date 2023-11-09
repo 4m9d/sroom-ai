@@ -28,7 +28,7 @@ jobs:
                     
             git fetch
             git checkout ${{ github.event.pull_request.head.ref }}
-            git pull origin ${{ github.event.pull_request.head.ref }}
+            git pull
             
             pip3 install -r requirements.txt
 
