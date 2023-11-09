@@ -4,7 +4,9 @@ from celery_app import celery_app
 from app.script import script, scriptService
 from main import constants
 from app.summary import summary
-from app.quiz import quiz, quizv2
+from app.summary import summaryv2
+from app.quiz import quiz
+from app.quiz import quizv2
 
 
 class ResponseModel:
@@ -21,7 +23,7 @@ class ResponseModel:
             'is_valid': self.is_valid,
             'summary': self.summary,
             'quizzes': self.quizzes,
-            'tokens' : self.tokens
+            'tokens': self.tokens
         }
 
 
@@ -38,8 +40,8 @@ def index(video_id: str = '', video_title: str = ''):
     if youtube_script.is_valid:
         response.is_valid = 1
 
-        summary_result = loop.run_until_complete(summary.generate_summary(youtube_script.text, video_title))
-        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summary_result, youtube_script.token_count))
+        summary_result, summaries = loop.run_until_complete(summaryv2.generate_summary(youtube_script.raw_script, video_title))
+        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summaries))
 
         response.summary = summary_result
         response.quizzes = quizzes_result

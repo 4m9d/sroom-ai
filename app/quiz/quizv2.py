@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 from main import constants
@@ -6,8 +7,23 @@ from app.gpt import gpt
 MAX_TRY_COUNT = 3
 
 
-async def generate_quizzes(summary: str, script_tokens: int):
-    quiz_count = set_quiz_count(script_tokens)
+async def generate_quizzes(summaries: list):
+
+    if len(summaries) == 1:
+        quiz_count = 3
+    else:
+        quiz_count = 2
+
+    tasks = [generate_quizzes_chunk(summary, quiz_count) for summary in summaries]
+    quiz_chunk_list = await asyncio.gather(*tasks)
+
+    quiz_list = []
+    for quiz_chunk in quiz_chunk_list:
+        quiz_list.extend(quiz_chunk)
+    return quiz_list
+
+
+async def generate_quizzes_chunk(summary: str, quiz_count: int):
     prompt = summary + constants['prompt']['multiple_choice_quiz']['kr'] + str(quiz_count)
     quiz_json = {}
     system_message = constants['prompt']['multiple_choice_quiz']['system_message']
@@ -19,16 +35,6 @@ async def generate_quizzes(summary: str, script_tokens: int):
             break
 
     return quiz_json
-
-
-def set_quiz_count(script_tokens: int):
-    quiz_count = 3
-    if script_tokens > 5000:
-        quiz_count += int((script_tokens - 5000) / 2500) + 1
-        if quiz_count > 15:
-            quiz_count = 15
-
-    return quiz_count
 
 
 def _reformat_quiz(quiz_json: str):
