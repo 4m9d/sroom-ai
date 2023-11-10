@@ -26,13 +26,7 @@ prompt :
   final_summary:
     system_message : {"role": "system", "content": "write the given text in the given markdown format, where applicable :  ### {section name} \n {content}"}
     en : "\n\n Please summarize the article in make sure to write the summary in Korean. Please write in Korean but English terms in English. And please make the summary in the form of a markdown raw code with escape sequence."
-    kr : "\n\n 아래는 유튜브 스크립트야. 해당 스크립트를 한국어로 마크다운 형식으로 요약해줘.\n
-        키워드나 핵심 내용들을 나눠서 아래 예시 처럼 작성해줘.\n\n
-        예시 : \n
-        ### 6.25전쟁 발발 이유 \n
-        - 미국이 애치슨 라인을 발표하였고 한국이 해당 영역에 들지 못했다. \n
-        - 소련이 북한에 군사적 지원을 했다.
-        "
+    kr : "\n\n 아래는 유튜브 스크립트야. 해당 스크립트를 한국어로 마크다운 형식으로 요약해줘. 키워드나 핵심 내용들을 나눠서 작성해줘."
 
   summary :
     system_message: { "role": "system", "content": "summarize the given text in korean so that it contains everything information as much as possible." }
