@@ -19,7 +19,7 @@ async def generate_summary(scripts: dict, video_title: str):
     for idx, summary in enumerate(summaries):
         time_delta = datetime.timedelta(seconds=int(time_stamp[idx]))
         time_format = str(time_delta)
-        final_summary += ('<a href=\"' + time_format.replace(":", "") + '\" style=\"color:#FA5B3E;'
+        final_summary += ('<a href=\"#' + time_format.replace(":", "") + '\" style=\"color:#FA5B3E;'
                                         'font-size: 1.125rem;line-height: 1.75rem;text-decoration-line:none;'
                                         'display:inline-block;background-color:rgba(250, 91, 62, 0.2);'
                                         'border-radius:0.25rem;padding:0.125rem 0.25rem;\">' +
