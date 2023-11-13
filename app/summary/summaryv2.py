@@ -47,7 +47,7 @@ def divide_chunk(scripts: dict):
         else:
             chunk_text += script['text']
 
-    if len(chunk_text) < 1000:
+    if len(chunk_text) < 1000 and len(chunks) > 0:
         chunks[-1] += chunk_text
     else:
         time_stamps.append(time_stamp)
