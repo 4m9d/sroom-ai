@@ -41,6 +41,6 @@ prompt :
           quiz_type은 1로 할당해주고, quiz_question에는 문제가 들어가면 되.
           quiz_select_options에는 객관식 선택 옵션들이 리스트 형식으로 들어가면 되.
           예를 들어 선택 옵션이 옵션1, 옵션2, 옵션3 이면, \"quiz_select_options\": [\"옵션1\", \"옵션2\", \"옵션3\"]이런 식으로 만들어야해.
-          answer에는 quiz_select_options에서 정답인 element의 인덱스 번호를 넣어줘. 인덱스 시작 번호는 1이야.\n
+          answer에는 quiz_select_options에서 정답인 element의 인덱스 번호를 넣어줘. 인덱스 시작 번호는 1이야. 정답은 반드시 한개로 만들어주고 리스트가 아닌 단일 정수형이어야해. \n
           반드시 json형식으로만 답변해주고 문제는 한국어로 출제해줘.\n
           문제 갯수(N) = "
