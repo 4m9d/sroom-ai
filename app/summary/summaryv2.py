@@ -58,5 +58,4 @@ def divide_chunk(scripts: dict):
 
 def reformat_summary(summary: str):
     summary.replace("\#", "#")
-    summary = re.sub(r"```", "", summary)
     return summary
