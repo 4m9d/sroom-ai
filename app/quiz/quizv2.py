@@ -24,6 +24,9 @@ async def generate_quizzes(summaries: list):
     for quiz in quiz_list:
         if isinstance(quiz['answer'], list) and len(quiz['answer']) > 0:
             quiz['answer'] = quiz['answer'][0]
+            
+        if isinstance(quiz['answer'], str):
+            quiz['answer'] = int(quiz['answer'])
 
         if quiz['answer'] == 0:
             quiz['answer'] = 1
