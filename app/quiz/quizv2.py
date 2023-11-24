@@ -28,6 +28,9 @@ async def generate_quizzes(summaries: list):
         if quiz['answer'] == 0:
             quiz['answer'] = 1
 
+        if len(quiz['quiz_select_options']) < quiz['answer']:
+            quiz['answer'] = len(quiz['quiz_select_options'])
+
     return quiz_list
 
 
