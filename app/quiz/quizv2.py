@@ -20,6 +20,20 @@ async def generate_quizzes(summaries: list):
     quiz_list = []
     for quiz_chunk in quiz_chunk_list:
         quiz_list.extend(quiz_chunk)
+
+    for quiz in quiz_list:
+        if isinstance(quiz['answer'], list) and len(quiz['answer']) > 0:
+            quiz['answer'] = quiz['answer'][0]
+            
+        if isinstance(quiz['answer'], str):
+            quiz['answer'] = int(quiz['answer'])
+
+        if quiz['answer'] == 0:
+            quiz['answer'] = 1
+
+        if len(quiz['quiz_select_options']) < quiz['answer']:
+            quiz['answer'] = len(quiz['quiz_select_options'])
+
     return quiz_list
 
 
