@@ -1,7 +1,6 @@
 ## sroom-ai
 
 welcome to sroom ai
-add message : for github action test
 
 ## 필독! Sroom AI Server 환경 세팅
 
