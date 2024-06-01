@@ -2,7 +2,7 @@ default_language : "ko"
 
 gpt_model :
   small : "gpt-3.5-turbo"
-  large : "gpt-3.5-turbo-16k"
+  large : "gpt-3.5-turbo-0125"
 
 message :
   error:
