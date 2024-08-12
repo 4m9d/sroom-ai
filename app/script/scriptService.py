@@ -10,7 +10,8 @@ def get_script(script: Script, video_id: str):
 
     try:
         lang_list = YouTubeTranscriptApi.list_transcripts(video_id)
-    except:
+    except Exception as e:
+        print(e)
         script.is_valid = False
         return
 
