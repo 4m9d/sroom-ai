@@ -1,62 +1,46 @@
+import asyncio
+
+import aiohttp
 import openai
 import os
 
 from main import constants
-from app.script.script import *
-
 
 openai.api_key = os.environ['GPT_API_KEY']
 
-
-def request_gpt(prompt: str):
-    response = openai.ChatCompletion.create(
-        model=constants['gpt_model']['small'],
-        messages=[
-            constants['prompt']['system_message'],
-            {"role": "user", "content": prompt}
-        ],
-        temperature=constants['model_parameter']['temperature']['high'],
-        max_tokens=constants['model_parameter']['max_token']['1k']
-    )
-
-    return response["choices"][0]["message"]["content"]
+MAX_CYCLE = 30
 
 
-def generate_summary(script: Script):
-    summary_prompt = constants['prompt']['summary']
-    prompt = script.text + summary_prompt
+async def request_gpt(prompt: str, system_message: dict):
 
-    summary = request_gpt(prompt)
+    for cycle in range(MAX_CYCLE):
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False)) as session:
+            try:
+                async with session.post(
+                    constants['model_parameter']['url'],
+                    headers={'Authorization': f'Bearer {openai.api_key}'},
+                    json={
+                        'messages': [
+                            system_message,
+                            {"role": "user", "content": prompt}
+                        ],
+                        'model': constants['gpt_model']['large'],
+                        'temperature': constants['model_parameter']['temperature']['high'],
+                        'max_tokens': constants['model_parameter']['max_token']['2k']
+                    }
+                ) as response:
+                    response_data = await response.json()
+                    print(response.status)
 
-    return summary
+                    if response.status == 200:
+                        return response_data["choices"][0]["message"]["content"]
+                    elif response.status == 429:
+                        print("exceed GPT rate limit. wait for 10 sec")
+                        await asyncio.sleep(10)
+                    elif response.status == 500 or response.status == 503:
+                        print('GPT Server Error. wait for 30 sec')
+                        await asyncio.sleep(30)
+            except:
+                print("etc Error retry")
 
-
-def reformat_summary(summary: str):
-    summary = summary.replace("\n", "\\n")
-    summary = summary.replace("\"", "\\\"")
-
-    return summary
-
-
-def generate_quiz(summary: str):
-    quiz_prompt = constants['prompt']['quiz']
-
-    prompt = summary + quiz_prompt
-
-    quiz_json = ''
-    quiz_json += request_gpt(prompt)
-
-    quiz_json = reformat_quiz(quiz_json)
-
-    return quiz_json
-
-
-def reformat_quiz(quiz_json: str):
-    quiz_json = quiz_json.replace("\n", "")
-    quiz_json = quiz_json.replace("\"", '"')
-
-    quiz_json = quiz_json[1:-1]
-
-    return quiz_json
-
-
+    raise Exception('GPT rate limit retry failed')

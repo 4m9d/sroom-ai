@@ -2,8 +2,7 @@
 
 welcome to sroom ai
 
-
-## 필독! FastAPI 개발환경 세팅
+## 필독! Sroom AI Server 환경 세팅
 
 1. 파이썬 설치하기
    
@@ -36,14 +35,45 @@ welcome to sroom ai
    를 입력하여 요구되는 패키지 들을 자동으로 설치한다.
 
    환경변수 "GPT_API_KEY"를 생성하여 본인의 API키를 저장한다.
+ 
+4. Celery 환경 세팅 
+
+   앞서 pip3 install 명령어를 통해 celery 라이브러리 설치는 완료되었으나 메시지 블로커와 결과 백엔드를 위한
+   DB 설치가 필요하다
 
    ```bash
-   python3 main.py
+   brew install redis
    ```
-   를 입력하면 localhost:8000 url 이 뜬다. 해당 페이지에 접속하면
 
-   처음에는 "Internal Server Error"라고 뜬다.
+   를 통해 redis를 설치한다.
 
-   여기에 "/?video_id={EXAMPLE_ID}&lang={AUDIO_LANGUAGE}" 를 추가하여 실행하면
-   요약본, 퀴즈가 담긴 JSON이 리턴된다.
-   
+5. 실행하기
+
+   모든 세팅이 완료되었다면 아래 명령어를 통해 실행해야 한다.
+   brew 명령어를 제외한 모든 명령은 프로젝트 패키지 안에서 실행해야 한다.
+   또한 각 명령어를 서로 다른 터미널에서 실행해야 한다.
+
+   ```bash
+   brew services start redis
+   celery -A celery_app worker -l info
+   celery -A celery_app flower --address=localhost --port=5555
+   python3 main.py local
+   ```
+
+   모든 명령어를 입력해 정상 동작이 확인되면 아래 URL 및 API를 통해 작동 시킬 수 있다.
+
+
+   ```bash
+   http://127.0.0.1:8000/?video_id={}
+   ```
+   해당 Url에서 유튜브 video_id를 넣으면 작업이 등록되며
+
+   ```bash
+   http://127.0.0.1:5555
+   ```
+   를 통해 등록된 작업 목록을 확인할 수 있다.
+
+   ```bash
+   http://127.0.0.1:8000/results
+   ```
+   에서는 아직 조회하지 않은 모든 작업 수행 결과가 리스트 형태로 반환된다.

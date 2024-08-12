@@ -1,36 +1,50 @@
-from app.script.scriptService import *
+import asyncio
+from celery_app import celery_app
+
+from app.script import script, scriptService
 from main import constants
-from app.gpt.gpt import *
-import json
+from app.summary import summary
+from app.summary import summaryv2
+from app.quiz import quiz
+from app.quiz import quizv2
 
 
-async def index(video_id: str = '', lang: str = constants['default_language']):
-    youtube_script = Script()
-    get_script(youtube_script, video_id, lang)
+class ResponseModel:
+    def __init__(self):
+        self.video_id = ''
+        self.summary = ''
+        self.is_valid = 0
+        self.quizzes = []
+        self.tokens = 0
 
-    # 스크립트가 3000토큰이 넘을 경우 요약본 생성이 현 시점에선 불가능 하므로 에러 메시지와 함께 리턴
-    if youtube_script.token_count > constants['script']['max_token']:
-        return "Error : " + constants['message']['error']['over_token']
-
-    # GPT로부터 요약본 생성
-    summary = generate_summary(youtube_script)
-
-    # 생성한 요약본을 기준으로 GPT로부터 퀴즈 생성
-    quiz = generate_quiz(summary)
-
-    # GPT로 부터 받은 여러 정보들을 JSON 양식에 맞게 조합
-
-    response = jsonify_response(video_id, summary, quiz)
-
-    return response
+    def to_dict(self):
+        return {
+            'video_id': self.video_id,
+            'is_valid': self.is_valid,
+            'summary': self.summary,
+            'quizzes': self.quizzes,
+            'tokens': self.tokens
+        }
 
 
-def jsonify_response(video_id: str, summary: str, quiz: str):
-    response_string = '{'
-    response_string += '"videoCode": "{0}", "summary": "{1}", {2}'.format(video_id, summary, quiz)
-    response_string += '}'
+@celery_app.task()
+def index(video_id: str = '', video_title: str = ''):
+    response = ResponseModel()
+    loop = asyncio.get_event_loop()
 
-    # 조합한 String을 JSON 형식으로 변환
-    response_json = json.loads(response_string)
+    youtube_script = script.Script()
+    scriptService.get_script(youtube_script, video_id)
 
-    return response_json
+    response.video_id = video_id
+
+    if youtube_script.is_valid:
+        response.is_valid = 1
+
+        summary_result, summaries = loop.run_until_complete(summaryv2.generate_summary(youtube_script.raw_script, video_title))
+        quizzes_result = loop.run_until_complete(quizv2.generate_quizzes(summaries))
+
+        response.summary = summary_result
+        response.quizzes = quizzes_result
+        response.tokens = youtube_script.token_count
+
+    return response.to_dict()
