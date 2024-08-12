@@ -3,6 +3,7 @@ default_language : "ko"
 gpt_model :
   small : "gpt-3.5-turbo"
   large : "gpt-3.5-turbo-16k"
+  4o_mini : "gpt-4o-mini"
 
 message :
   error:
