@@ -24,7 +24,7 @@ async def request_gpt(prompt: str, system_message: dict):
                             system_message,
                             {"role": "user", "content": prompt}
                         ],
-                        'model': constants['gpt_model']['large'],
+                        'model': constants['gpt_model']['4o_mini'],
                         'temperature': constants['model_parameter']['temperature']['high'],
                         'max_tokens': constants['model_parameter']['max_token']['2k']
                     }
